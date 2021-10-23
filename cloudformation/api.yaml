@@ -1,0 +1,105 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "Pushes logs, metrics and traces from AWS to Datadog."
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  ClusterName:
+    Type: String
+  ServiceName:
+    Type: String
+  CertArn:
+    Type: String
+
+Resources:
+  AccessLogs:
+    Type: AWS::Logs::LogGroup
+
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: Prod
+      AccessLogSettings:
+        DestinationArn: !GetAtt AccessLogs.Arn
+        Format: $context.requestId
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 1
+        ThrottlingRateLimit: 1
+      RouteSettings:
+        "GET /discord-bot/start": {}
+        "GET /discord-bot/stop": {}
+      StageVariables:
+        StageVar: Value
+      FailOnWarnings: True
+      Domain:
+        DomainName: api.dammers.dev
+        CertificateArn: !Ref CertArn
+
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: ECS Discord Bot start/stop
+      Handler: api.lambda_handler
+      MemorySize: 128
+      Runtime: python3.7
+      Timeout: 120
+      CodeUri: ../handler.zip
+      Environment:
+        Variables:
+          CLUSTER_NAME: !Ref ClusterName
+          SERVICE_NAME: !Ref ServiceName
+      Events:
+        CheckLogGroupsScheduledEvent:
+          Type: Schedule
+          Properties:
+            Description: Event rule to reset permissions every day (1am AEST)
+            Schedule: 'cron(0 15 * * ? *)'
+            Enabled: True
+        StartService: # warning: creates a public endpoint
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Method: GET
+            Path: /discord-bot/start
+            TimeoutInMillis: 15000
+            PayloadFormatVersion: "2.0"
+        StopService: # warning: creates a public endpoint
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Method: GET
+            Path: /discord-bot/stop
+            TimeoutInMillis: 15000
+            PayloadFormatVersion: "2.0"
+        StopService: # warning: creates a public endpoint
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Method: GET
+            Path: /discord-bot/restart
+            TimeoutInMillis: 15000
+            PayloadFormatVersion: "2.0"
+      Role: !GetAtt Role.Arn
+
+  Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: "sts:AssumeRole"
+            Principal:
+              Service: lambda.amazonaws.com
+      Policies:
+        - PolicyName: ECS
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "ecs:Describe*"
+                  - "ecs:List*"
+                  - "ecs:UpdateService"
+                Resource:
+                  - "*"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
