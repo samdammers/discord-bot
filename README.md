@@ -2,7 +2,7 @@
 
 A simple discord bot that helps you manage your server by providing useful commands like playing music or deleting text messages.
 
-You can find the tutorial about building a discord music bot [here](https://gabrieltanner.org/blog/dicord-music-bot). 
+You can find the tutorial about building a discord music bot [here](https://gabrieltanner.org/blog/dicord-music-bot).
 
 ## Table of content
 
@@ -16,10 +16,10 @@ You can find the tutorial about building a discord music bot [here](https://gabr
 
 ## Requirements
 
-- [Node](https://nodejs.org/en/) - Version 16 or higher
-- [NPM](https://www.npmjs.com/)
-- [FFMPEG](https://www.ffmpeg.org/)
-- [Docker](https://www.docker.com/) (optional)
+* [Node](https://nodejs.org/en/) - Version 16 or higher
+* [NPM](https://www.npmjs.com/)
+* [FFMPEG](https://www.ffmpeg.org/)
+* [Docker](https://www.docker.com/) (optional)
 
 ## Getting started
 
@@ -66,11 +66,11 @@ docker run -d discordbot
 
 Before you can use the bots slash command you first need to add them to your Discord server. You can use the `!deploy` command to do so.
 
-<img src="./assets/deploy-commands.png">
+![Deploy example](./assets/deploy-commands.png)
 
 After deploying the commands you should be able to see and access them by typing a slash:
 
-<img src="./assets/commands.png">
+![Commands example](./assets/commands.png)
 
 ## Features & Commands
 
@@ -103,53 +103,53 @@ After deploying the commands you should be able to see and access them by typing
 `/playtop YOUTUBE_URL`  
 `/playtop SONG_NAME`
 
-<img src="./assets/playing_song.png">
+![Song playing example](./assets/playing_song.png)
 
 ### Pause
 
-⏸️ Pause music
+⏸️ Pause music.
 
 `/pause`
 
 ### Resume
 
-▶️ Resume playing paused music
+▶️ Resume playing paused music.
 
 `/resume`
 
 ### Now Playing
 
-🎶 Display current playing song
+🎶 Display current playing song.
 
 `/nowplaying`
 
 ### Queue
 
-🗒️ Display the current queue
+🗒️ Display the current queue.
 
 `/queue`
 
 ### Shuffle
 
-🔀 Shuffle the current queue
+🔀 Shuffle the current queue.
 
 `/shuffle`
 
 ### Loop
 
-🔁 Loop/Repeat controls. Off, Track and Queue
+🔁 Loop/Repeat controls. Off, Track and Queue.
 
 `/loop MODE`
 
 ### Skip
 
-⏭️ Skip the current playing song and play the next in queue
+⏭️ Skip the current playing song and play the next in queue.
 
 `/skip`
 
 ### Remove
 
-⏏ Remove song from the queue
+⏏ Remove song from the queue.
 
 `/remove POSITION`
 
@@ -161,19 +161,19 @@ After deploying the commands you should be able to see and access them by typing
 
 ### Swap
 
-↔️ Swap two songs current positions with each other
+↔️ Swap two songs current positions with each other.
 
 `/swap POSITION_1 POSITION_2`
 
 ### Stop
 
-🔇 Stop playing (disconnects bot from voice channel)
+🔇 Stop playing (disconnects bot from voice channel).
 
 `/stop`
 
 ### Volume
 
-🔊 Adjust the music bot volume between 0-200
+🔊 Adjust the music bot volume between 0-200. This works for the current queue and is a global volume for all listeners.
 
 `/volume NUMBER`
 
