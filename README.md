@@ -116,9 +116,8 @@ After deploying the commands you should be able to see and access them by typing
 `/remove POSITION`
 
 * Now Playing (/nowplaying)
-* Get information about a user (/userinfo USER)
-* Ban a player (/ban USER)
-* Delete the latest chat messages (/purge NUM_OF_MESSAGES)
+
+* 
 
 <img src="./assets/playing_song.png">
 
