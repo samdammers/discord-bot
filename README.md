@@ -92,9 +92,6 @@ After deploying the commands you should be able to see and access them by typing
 * [Stop](#stop)
 * [Volume](#volume)
 * [Help](#help)
-* [Userinfo](#userinfo)
-* [Ban](#ban)
-* [Purge](#purge)
 
 ### Play
 
@@ -187,18 +184,6 @@ After deploying the commands you should be able to see and access them by typing
 ❓ Display commands
 
 `/help`
-
-### Userinfo
-
-* Get information about a user (/userinfo USER)
-
-### Ban
-
-* Ban a player (/ban USER)
-
-### Purge
-
-* Delete the latest chat messages (/purge NUM_OF_MESSAGES)
 
 ## Common errors
 
