@@ -38,7 +38,7 @@ cd discord-bot/
 npm install
 
 # Configure Discord Bot Token
-echo "DISCORD_TOKEN='INSERT_YOUR_TOKEN_HERE'" > .env
+ echo "DISCORD_TOKEN='INSERT_YOUR_TOKEN_HERE'" > .env
 ```
 
 ### Required permissions
@@ -49,7 +49,11 @@ Enable the `Server Members Intent` and `Message Content Intent` which can be fou
 
 ### Configuration
 
-After cloning the project and installing all dependencies, you need to add your Discord API token in the config.json file.
+After cloning the project and installing all dependencies, you need to add your Discord API token in the `.env` file.
+
+### Changing the status
+
+You can change the status of your discord bot by editing the `activity` and `activityType` variables inside of the `config.json` file. `activityType` needs to be set to an integer with the following [options](https://discord-api-types.dev/api/discord-api-types-v10/enum/ActivityType).
 
 ### Starting the application
 
