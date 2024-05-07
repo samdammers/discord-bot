@@ -2,6 +2,7 @@
 from pprint import pprint
 import os
 import boto3
+import json
 
 
 def ecs_actions(ecs_client, action):
@@ -39,12 +40,19 @@ def lambda_handler(event, context):
 
     sess = boto3.session.Session()
     detail_type = event.get("detail-type", "")
-    route_key = event.get("routeKey", "")
-
-    if route_key == "GET /discord-bot/stop" or route_key == "GET /discord-bot/restart" or detail_type == "Scheduled Event":
+    route_key = event.get("path", "")
+    pprint(event)
+    if route_key == "/discord-bot/stop" or route_key == "/discord-bot/restart" or detail_type == "Scheduled Event":
         ecs_actions(sess.client("ecs"), "STOP")
-
-    if route_key == "GET /discord-bot/start" or route_key == "GET /discord-bot/restart":
+    elif route_key == "/discord-bot/start" or route_key == "/discord-bot/restart":
         ecs_actions(sess.client("ecs"), "START")
+    else:
+        return {
+            'statusCode': 400,
+            'body': json.dumps('Bad Request')
+        }
 
-    return
+    return {
+        "statusCode": 200,
+        "body": json.dumps("Success")
+    }

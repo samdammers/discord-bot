@@ -1,6 +1,6 @@
 
 docker-build:
-	docker build --tag discordbot .
+	docker buildx build --platform=linux/amd64 --tag discordbot .
 docker-deploy:
 	aws ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(AWS_ACCOUNT).dkr.ecr.$(AWS_REGION).amazonaws.com && \
 	docker tag discordbot:latest $(AWS_ACCOUNT).dkr.ecr.$(AWS_REGION).amazonaws.com/discordbot:latest && \
@@ -29,14 +29,16 @@ sam-local: build
 		--event test/test.json
 
 deploy-api:
-	$(AWSCLI) sam deploy --no-fail-on-empty-changeset \
+	$(AWSCLI) sam deploy --region $(AWS_REGION) --no-fail-on-empty-changeset \
 		--stack-name $(SERVICE_NAME)-api \
 		--template-file cloudformation/api.yaml \
-		--s3-bucket dammers-staging \
+		--s3-bucket metalisticpain-artifacts \
 		--capabilities CAPABILITY_NAMED_IAM \
 		--parameter-overrides \
 			ClusterName=$(CLUSTER_NAME) \
 			ServiceName=$(SERVICE_NAME) \
+			Domain="$(DOMAIN)" \
 			CertArn=$(shell aws acm list-certificates --query "CertificateSummaryList[?DomainName=='api.$(DOMAIN)'].CertificateArn" --output text) \
+			HostedZoneId=$(shell aws route53 list-hosted-zones --query "HostedZones[?Name=='$(DOMAIN).'].Id" --output text | cut -d / -f3) \
 		--tags \
 			service=$(SERVICE_NAME)
