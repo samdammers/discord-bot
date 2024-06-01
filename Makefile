@@ -1,10 +1,15 @@
 
 docker-build:
 	docker buildx build --platform=linux/amd64 --tag discordbot .
+
 docker-deploy:
 	aws ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(AWS_ACCOUNT).dkr.ecr.$(AWS_REGION).amazonaws.com && \
 	docker tag discordbot:latest $(AWS_ACCOUNT).dkr.ecr.$(AWS_REGION).amazonaws.com/discordbot:latest && \
 	docker push $(AWS_ACCOUNT).dkr.ecr.$(AWS_REGION).amazonaws.com/discordbot:latest
+
+docker-run:
+	docker build --tag discordbot-local .
+	docker run -e DISCORD_TOKEN=$(DISCORD_TOKEN) discordbot-local
 
 bounce:
 	aws ecs stop-task --cluster arn:aws:ecs:$(AWS_REGION):${AWS_ACCOUNT}:cluster/${CLUSTER_NAME} \
